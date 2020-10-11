@@ -3,11 +3,14 @@ package com.grupo7.practico.utils;
 import com.grupo7.practico.model.Cliente;
 import com.grupo7.practico.model.ControlStock;
 import com.grupo7.practico.model.ControlStockId;
+import com.grupo7.practico.model.Factura;
 import com.grupo7.practico.model.Producto;
 import com.grupo7.practico.repository.ClienteRepository;
 import com.grupo7.practico.repository.ControlStockRepository;
 import com.grupo7.practico.repository.FacturaRepository;
 import com.grupo7.practico.repository.ProductoRepository;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -132,6 +135,10 @@ public class DataLoader implements ApplicationRunner {
   }
 
   private void createFacturas() {
-
+    Map<Producto,Integer> productoIntegerMap= new HashMap<>();
+    Producto productoTemp =
+        Producto.builder().idProducto(11).nombre("Jabon").precio(180.00).build();
+    productoIntegerMap.put(productoTemp,3);
+    //Factura facturaTemp = Factura.builder().productoCantidad(productoIntegerMap).
   }
 }
