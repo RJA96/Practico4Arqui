@@ -2,24 +2,27 @@ package com.grupo7.practico.controller;
 
 import com.grupo7.practico.model.Cliente;
 import com.grupo7.practico.repository.ClienteRepository;
+import java.util.Optional;
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/clientes")
 public class ClienteController {
 
-  private Logger logger = LoggerFactory.getLogger(ClienteController.class);
+  private static Logger logger = LoggerFactory.getLogger(ClienteController.class);
   private ClienteRepository clienteRepository;
 
   @Autowired
@@ -32,7 +35,7 @@ public class ClienteController {
     return this.clienteRepository.findAll();
   }
 
-  @PostMapping("/save")
+  @PostMapping(value = "/save")
   public ResponseEntity<?> add(@RequestBody Cliente cliente) {
     try {
       Cliente cliente1 = this.clienteRepository.save(cliente);
@@ -45,10 +48,27 @@ public class ClienteController {
 
   @PutMapping("/update")
   public Cliente update(@RequestBody Cliente cliente) {
-    if (ObjectUtils.isEmpty(clienteRepository.findById(cliente.getIdCliente()))) {
+    if (!ObjectUtils.isEmpty(clienteRepository.findById(cliente.getIdCliente()))) {
       return this.clienteRepository.save(cliente);
     } else {
       return null;
+    }
+  }
+
+  @DeleteMapping("/delete")
+  public ResponseEntity<?> delete(@RequestParam Integer idCliente) {
+    if (!ObjectUtils.isEmpty(clienteRepository.findById(idCliente))) {
+      try {
+        Optional<Cliente> clienteTemp = clienteRepository.findById(idCliente);
+        clienteRepository.delete(clienteTemp.get());
+        return ResponseEntity.status(HttpStatus.OK).body(clienteTemp.get());
+      } catch (Exception e) {
+        logger.error("Error al eliminar cliente", e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body("Error al eliminar cliente");
+      }
+    } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente no encontrado");
     }
   }
 }
