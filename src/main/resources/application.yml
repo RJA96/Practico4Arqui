@@ -1,12 +1,9 @@
 spring:
   jpa:
-    generate-ddl: true
-    show-sql: true
     hibernate:
       ddl-auto: create-drop
-      dialect: org.hibernate.dialect.MySQLDialect
   datasource:
     url: jdbc:mysql://localhost:3306/Practico4?createDatabaseIfNotExist=true
-    username:
-    password:
+    username: root
+    password: password
     driverClassName: com.mysql.cj.jdbc.Driver

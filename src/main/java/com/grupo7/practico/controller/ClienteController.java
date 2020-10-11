@@ -1,0 +1,54 @@
+package com.grupo7.practico.controller;
+
+import com.grupo7.practico.model.Cliente;
+import com.grupo7.practico.repository.ClienteRepository;
+import org.apache.commons.lang3.ObjectUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/clientes")
+public class ClienteController {
+
+  private Logger logger = LoggerFactory.getLogger(ClienteController.class);
+  private ClienteRepository clienteRepository;
+
+  @Autowired
+  public ClienteController(ClienteRepository clienteRepository) {
+    this.clienteRepository = clienteRepository;
+  }
+
+  @GetMapping("/getAll")
+  public Iterable<Cliente> all() {
+    return this.clienteRepository.findAll();
+  }
+
+  @PostMapping("/save")
+  public ResponseEntity<?> add(@RequestBody Cliente cliente) {
+    try {
+      Cliente cliente1 = this.clienteRepository.save(cliente);
+      return ResponseEntity.status(HttpStatus.OK).body(cliente1);
+    } catch (Exception e) {
+      logger.error("Error al guardar cliente", e);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    }
+  }
+
+  @PutMapping("/update")
+  public Cliente update(@RequestBody Cliente cliente) {
+    if (ObjectUtils.isEmpty(clienteRepository.findById(cliente.getIdCliente()))) {
+      return this.clienteRepository.save(cliente);
+    } else {
+      return null;
+    }
+  }
+}
