@@ -12,7 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.io.Serializable;
 
-@EnableAutoConfiguration
 @Entity
 @Data
 @NoArgsConstructor

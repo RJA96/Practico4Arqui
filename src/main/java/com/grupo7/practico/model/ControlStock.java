@@ -10,7 +10,6 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import java.io.Serializable;
 
-@EnableAutoConfiguration
 @Entity
 @Data
 @NoArgsConstructor

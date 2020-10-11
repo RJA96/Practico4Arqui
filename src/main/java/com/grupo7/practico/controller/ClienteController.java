@@ -37,13 +37,7 @@ public class ClienteController {
 
   @PostMapping(value = "/save")
   public ResponseEntity<?> add(@RequestBody Cliente cliente) {
-    try {
-      Cliente cliente1 = this.clienteRepository.save(cliente);
-      return ResponseEntity.status(HttpStatus.OK).body(cliente1);
-    } catch (Exception e) {
-      logger.error("Error al guardar cliente", e);
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-    }
+      return ResponseEntity.status(HttpStatus.OK).body(this.clienteRepository.save(cliente));
   }
 
   @PutMapping("/update")

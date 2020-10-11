@@ -1,6 +1,7 @@
 package com.grupo7.practico.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.List;
 
-@EnableAutoConfiguration
 @Entity
 @Data
 @NoArgsConstructor
@@ -29,6 +29,6 @@ public class Cliente implements Serializable {
     String nombre;
 
     @OneToMany
-    List<Factura> facturas;
+    List<Factura> facturas = new ArrayList<>();
 
 }
