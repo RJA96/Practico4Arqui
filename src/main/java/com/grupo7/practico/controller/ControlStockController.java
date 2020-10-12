@@ -53,19 +53,19 @@ public class ControlStockController {
       return ResponseEntity.ok()
           .body("El stock del producto: " + stockRequest.getProducto() + " fue modificado");
     } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+      return ResponseEntity.status(HttpStatus.NOT_FOUND)
+          .body("producto no encontrado para añadir stock");
     }
   }
 
   @GetMapping
   @RequestMapping("/getStock")
   public ResponseEntity<?> getStock() {
-    try{
+    try {
       return ResponseEntity.ok().body(controlStockService.getAll());
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error al obtener los stock");
     }
-
   }
 
   @DeleteMapping

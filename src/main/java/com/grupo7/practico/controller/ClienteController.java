@@ -2,7 +2,10 @@ package com.grupo7.practico.controller;
 
 import com.grupo7.practico.model.Cliente;
 import com.grupo7.practico.repository.ClienteRepository;
+import com.grupo7.practico.service.ClienteService;
+import java.util.List;
 import java.util.Optional;
+import javassist.NotFoundException;
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,45 +26,40 @@ import org.springframework.web.bind.annotation.RestController;
 public class ClienteController {
 
   private static Logger logger = LoggerFactory.getLogger(ClienteController.class);
-  private ClienteRepository clienteRepository;
+  private ClienteService clienteService;
 
   @Autowired
-  public ClienteController(ClienteRepository clienteRepository) {
-    this.clienteRepository = clienteRepository;
+  public ClienteController(ClienteService clienteService) {
+    this.clienteService = clienteService;
   }
 
   @GetMapping("/getAll")
-  public Iterable<Cliente> all() {
-    return this.clienteRepository.findAll();
+  public List<Cliente> all() {
+    return clienteService.getAll();
   }
 
   @PostMapping(value = "/save")
   public ResponseEntity<?> add(@RequestBody Cliente cliente) {
-      return ResponseEntity.status(HttpStatus.OK).body(this.clienteRepository.save(cliente));
+    clienteService.addCliente(cliente);
+    return ResponseEntity.status(HttpStatus.OK).body(cliente);
   }
 
   @PutMapping("/update")
-  public Cliente update(@RequestBody Cliente cliente) {
-    if (!ObjectUtils.isEmpty(clienteRepository.findById(cliente.getIdCliente()))) {
-      return this.clienteRepository.save(cliente);
-    } else {
-      return null;
+  public ResponseEntity<?> update(@RequestBody Cliente cliente) {
+    try{
+      clienteService.updateCliente(cliente);
+      return ResponseEntity.status(HttpStatus.OK).body(cliente);
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente no encontrado");
     }
   }
 
   @DeleteMapping("/delete")
   public ResponseEntity<?> delete(@RequestParam Integer idCliente) {
-    if (!ObjectUtils.isEmpty(clienteRepository.findById(idCliente))) {
-      try {
-        Optional<Cliente> clienteTemp = clienteRepository.findById(idCliente);
-        clienteRepository.delete(clienteTemp.get());
-        return ResponseEntity.status(HttpStatus.OK).body(clienteTemp.get());
-      } catch (Exception e) {
-        logger.error("Error al eliminar cliente", e.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body("Error al eliminar cliente");
-      }
-    } else {
+    try{
+      clienteService.deleteCliente(idCliente);
+      return ResponseEntity.ok().body("Eliminado control Stock id: " + idCliente);
+    } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente no encontrado");
     }
   }
