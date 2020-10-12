@@ -1,12 +1,8 @@
 package com.grupo7.practico.controller;
 
 import com.grupo7.practico.model.Cliente;
-import com.grupo7.practico.repository.ClienteRepository;
 import com.grupo7.practico.service.ClienteService;
 import java.util.List;
-import java.util.Optional;
-import javassist.NotFoundException;
-import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +42,7 @@ public class ClienteController {
 
   @PutMapping("/update")
   public ResponseEntity<?> update(@RequestBody Cliente cliente) {
-    try{
+    try {
       clienteService.updateCliente(cliente);
       return ResponseEntity.status(HttpStatus.OK).body(cliente);
     } catch (Exception e) {
@@ -56,9 +52,9 @@ public class ClienteController {
 
   @DeleteMapping("/delete")
   public ResponseEntity<?> delete(@RequestParam Integer idCliente) {
-    try{
+    try {
       clienteService.deleteCliente(idCliente);
-      return ResponseEntity.ok().body("Eliminado control Stock id: " + idCliente);
+      return ResponseEntity.ok().body("Eliminado Cliente id: " + idCliente);
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente no encontrado");
     }
