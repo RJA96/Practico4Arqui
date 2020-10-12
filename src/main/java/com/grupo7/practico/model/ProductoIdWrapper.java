@@ -15,8 +15,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ControlStockId implements Serializable {
-    @OneToOne
-    @MapsId
-    Producto producto;
+public class ProductoIdWrapper implements Serializable {
+  @OneToOne @MapsId Producto producto;
 }

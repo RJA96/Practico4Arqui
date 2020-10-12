@@ -2,8 +2,7 @@ package com.grupo7.practico.utils;
 
 import com.grupo7.practico.model.Cliente;
 import com.grupo7.practico.model.ControlStock;
-import com.grupo7.practico.model.ControlStockId;
-import com.grupo7.practico.model.Factura;
+import com.grupo7.practico.model.ProductoIdWrapper;
 import com.grupo7.practico.model.Producto;
 import com.grupo7.practico.repository.ClienteRepository;
 import com.grupo7.practico.repository.ControlStockRepository;
@@ -75,70 +74,70 @@ public class DataLoader implements ApplicationRunner {
         Producto.builder().idProducto(11).nombre("Jabon").precio(180.00).build();
     controlStockRepository.save(
         ControlStock.builder()
-            .controlStockId(ControlStockId.builder().producto(productoTemp).build())
+            .productoIdWrapper(ProductoIdWrapper.builder().producto(productoTemp).build())
             .cantidadStock(50)
             .build());
     productoTemp = Producto.builder().idProducto(12).nombre("Leche").precio(40.50).build();
     controlStockRepository.save(
         ControlStock.builder()
-            .controlStockId(ControlStockId.builder().producto(productoTemp).build())
+            .productoIdWrapper(ProductoIdWrapper.builder().producto(productoTemp).build())
             .cantidadStock(20)
             .build());
     productoTemp = Producto.builder().idProducto(13).nombre("Galletas").precio(20.50).build();
     controlStockRepository.save(
         ControlStock.builder()
-            .controlStockId(ControlStockId.builder().producto(productoTemp).build())
+            .productoIdWrapper(ProductoIdWrapper.builder().producto(productoTemp).build())
             .cantidadStock(30)
             .build());
     productoTemp = Producto.builder().idProducto(14).nombre("Pizza").precio(150.0).build();
     controlStockRepository.save(
         ControlStock.builder()
-            .controlStockId(ControlStockId.builder().producto(productoTemp).build())
+            .productoIdWrapper(ProductoIdWrapper.builder().producto(productoTemp).build())
             .cantidadStock(35)
             .build());
     productoTemp = Producto.builder().idProducto(15).nombre("Jamon").precio(90.00).build();
     controlStockRepository.save(
         ControlStock.builder()
-            .controlStockId(ControlStockId.builder().producto(productoTemp).build())
+            .productoIdWrapper(ProductoIdWrapper.builder().producto(productoTemp).build())
             .cantidadStock(25)
             .build());
     productoTemp = Producto.builder().idProducto(16).nombre("Quesoo").precio(200.0).build();
     controlStockRepository.save(
         ControlStock.builder()
-            .controlStockId(ControlStockId.builder().producto(productoTemp).build())
+            .productoIdWrapper(ProductoIdWrapper.builder().producto(productoTemp).build())
             .cantidadStock(40)
             .build());
     productoTemp = Producto.builder().idProducto(17).nombre("Plato").precio(70.00).build();
     controlStockRepository.save(
         ControlStock.builder()
-            .controlStockId(ControlStockId.builder().producto(productoTemp).build())
+            .productoIdWrapper(ProductoIdWrapper.builder().producto(productoTemp).build())
             .cantidadStock(25)
             .build());
     productoTemp = Producto.builder().idProducto(18).nombre("Tenedor").precio(30.00).build();
     controlStockRepository.save(
         ControlStock.builder()
-            .controlStockId(ControlStockId.builder().producto(productoTemp).build())
+            .productoIdWrapper(ProductoIdWrapper.builder().producto(productoTemp).build())
             .cantidadStock(15)
             .build());
     productoTemp = Producto.builder().idProducto(19).nombre("Vaso").precio(80.00).build();
     controlStockRepository.save(
         ControlStock.builder()
-            .controlStockId(ControlStockId.builder().producto(productoTemp).build())
+            .productoIdWrapper(ProductoIdWrapper.builder().producto(productoTemp).build())
             .cantidadStock(10)
             .build());
     productoTemp = Producto.builder().idProducto(20).nombre("Cerveza").precio(100.40).build();
     controlStockRepository.save(
         ControlStock.builder()
-            .controlStockId(ControlStockId.builder().producto(productoTemp).build())
+            .productoIdWrapper(ProductoIdWrapper.builder().producto(productoTemp).build())
             .cantidadStock(2)
             .build());
   }
 
   private void createFacturas() {
-    Map<Producto,Integer> productoIntegerMap= new HashMap<>();
+    Map<Producto, Integer> productoIntegerMap = new HashMap<>();
     Producto productoTemp =
         Producto.builder().idProducto(11).nombre("Jabon").precio(180.00).build();
-    productoIntegerMap.put(productoTemp,3);
-    //Factura facturaTemp = Factura.builder().productoCantidad(productoIntegerMap).
+    productoIntegerMap.put(productoTemp, 3);
+    // Factura facturaTemp = Factura.builder().productoCantidad(productoIntegerMap).
   }
 }

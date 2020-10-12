@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,13 +21,11 @@ import java.util.List;
 @Builder
 public class Cliente implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer idCliente;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  Integer idCliente;
 
-    String nombre;
+  String nombre;
 
-    @OneToMany
-    List<Factura> facturas = new ArrayList<>();
-
+  @OneToMany List<Factura> facturas = new ArrayList<>();
 }

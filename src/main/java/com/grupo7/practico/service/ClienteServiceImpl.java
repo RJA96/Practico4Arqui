@@ -35,8 +35,7 @@ public class ClienteServiceImpl implements ClienteService {
   public void updateCliente(Cliente cliente) {
     if (clienteRepository.findById(cliente.getIdCliente()).isPresent()) {
       clienteRepository.save(cliente);
-    }
-    else {
+    } else {
       throw new NotFoundException("No existe Cliente a actualizar");
     }
   }

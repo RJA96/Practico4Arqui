@@ -1,11 +1,7 @@
 package com.grupo7.practico.controller;
 
 import com.grupo7.practico.controller.request.StockRequest;
-import com.grupo7.practico.model.ControlStock;
-import com.grupo7.practico.model.ControlStockId;
-import com.grupo7.practico.repository.ControlStockRepository;
 import com.grupo7.practico.service.ControlStockService;
-import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

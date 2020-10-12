@@ -2,16 +2,14 @@ package com.grupo7.practico.service;
 
 import com.google.common.collect.Lists;
 import com.grupo7.practico.model.ControlStock;
-import com.grupo7.practico.model.ControlStockId;
+import com.grupo7.practico.model.ProductoIdWrapper;
 import com.grupo7.practico.model.Producto;
 import com.grupo7.practico.repository.ControlStockRepository;
 import com.grupo7.practico.repository.ProductoRepository;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javassist.NotFoundException;
 import lombok.SneakyThrows;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +22,7 @@ public class ControlStockServiceImpl implements ControlStockService {
 
   @Autowired
   public ControlStockServiceImpl(
-      ControlStockRepository controlStockRepository,
-      ProductoRepository productoRepository) {
+      ControlStockRepository controlStockRepository, ProductoRepository productoRepository) {
     this.controlStockRepository = controlStockRepository;
     this.productoRepository = productoRepository;
   }
@@ -43,28 +40,28 @@ public class ControlStockServiceImpl implements ControlStockService {
       ControlStock controlStock =
           ControlStock.builder()
               .cantidadStock(cantidad)
-              .controlStockId(ControlStockId.builder().producto(productoOptional.get()).build())
+              .productoIdWrapper(
+                  ProductoIdWrapper.builder().producto(productoOptional.get()).build())
               .build();
       controlStockRepository.save(controlStock);
-    }
-    else {
+    } else {
       throw new NotFoundException("No existe el producto para crear Stock");
     }
-
-
   }
 
   @SneakyThrows
   @Override
   public void addStock(Producto producto, Integer cantidad) {
-    Optional<ControlStock> controlStockOptional = controlStockRepository.findById(ControlStockId.builder().producto(
-        Producto.builder().idProducto(producto.getIdProducto()).build()).build());
+    Optional<ControlStock> controlStockOptional =
+        controlStockRepository.findById(
+            ProductoIdWrapper.builder()
+                .producto(Producto.builder().idProducto(producto.getIdProducto()).build())
+                .build());
     if (controlStockOptional.isPresent()) {
       ControlStock controlStockTemp = controlStockOptional.get();
       controlStockTemp.setCantidadStock(cantidad);
       controlStockRepository.save(controlStockTemp);
-    }
-    else {
+    } else {
       throw new NotFoundException("No existe el stock indicado");
     }
   }
@@ -72,12 +69,14 @@ public class ControlStockServiceImpl implements ControlStockService {
   @SneakyThrows
   @Override
   public void deleteStock(Integer id) {
-    Optional<ControlStock> controlStockOptional = controlStockRepository.findById(ControlStockId.builder().producto(
-        Producto.builder().idProducto(id).build()).build());
+    Optional<ControlStock> controlStockOptional =
+        controlStockRepository.findById(
+            ProductoIdWrapper.builder()
+                .producto(Producto.builder().idProducto(id).build())
+                .build());
     if (controlStockOptional.isPresent()) {
       controlStockRepository.delete(controlStockOptional.get());
-    }
-    else {
+    } else {
       throw new NotFoundException("No existe el stock indicado");
     }
   }

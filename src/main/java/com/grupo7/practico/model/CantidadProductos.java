@@ -1,22 +1,23 @@
 package com.grupo7.practico.model;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
-import javax.persistence.MapKeyColumn;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 /*
 Por las dudas
  */
 @Data
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class CantidadProductos {
-  Producto producto;
+
+  @EmbeddedId ProductoIdWrapper productoIdWrapper;
+
   Integer cantidad;
 }

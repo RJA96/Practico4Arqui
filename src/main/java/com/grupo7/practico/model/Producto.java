@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -19,13 +18,11 @@ import java.io.Serializable;
 @Builder
 public class Producto implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer idProducto;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  Integer idProducto;
 
-    String nombre;
+  String nombre;
 
-    Double precio;
-
-
+  Double precio;
 }
