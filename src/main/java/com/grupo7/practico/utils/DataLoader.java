@@ -1,14 +1,21 @@
 package com.grupo7.practico.utils;
 
+import com.grupo7.practico.model.CantidadProductos;
 import com.grupo7.practico.model.Cliente;
 import com.grupo7.practico.model.ControlStock;
+import com.grupo7.practico.model.Factura;
 import com.grupo7.practico.model.ProductoIdWrapper;
 import com.grupo7.practico.model.Producto;
+import com.grupo7.practico.repository.CantidadProductosRepository;
 import com.grupo7.practico.repository.ClienteRepository;
 import com.grupo7.practico.repository.ControlStockRepository;
 import com.grupo7.practico.repository.FacturaRepository;
 import com.grupo7.practico.repository.ProductoRepository;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -22,17 +29,20 @@ public class DataLoader implements ApplicationRunner {
   private FacturaRepository facturaRepository;
   private ProductoRepository productoRepository;
   private ControlStockRepository controlStockRepository;
+  private CantidadProductosRepository cantidadProductosRepository;
 
   @Autowired
   public DataLoader(
       ClienteRepository clienteRepository,
       FacturaRepository facturaRepository,
       ProductoRepository productoRepository,
-      ControlStockRepository controlStockRepository) {
+      ControlStockRepository controlStockRepository,
+      CantidadProductosRepository cantidadProductosRepository) {
     this.clienteRepository = clienteRepository;
     this.productoRepository = productoRepository;
     this.facturaRepository = facturaRepository;
     this.controlStockRepository = controlStockRepository;
+    this.cantidadProductosRepository = cantidadProductosRepository;
   }
 
   @Override
@@ -134,10 +144,28 @@ public class DataLoader implements ApplicationRunner {
   }
 
   private void createFacturas() {
-    Map<Producto, Integer> productoIntegerMap = new HashMap<>();
     Producto productoTemp =
-        Producto.builder().idProducto(11).nombre("Jabon").precio(180.00).build();
-    productoIntegerMap.put(productoTemp, 3);
-    // Factura facturaTemp = Factura.builder().productoCantidad(productoIntegerMap).
+        Producto.builder().idProducto(13).nombre("Galletas").precio(20.50).build();
+    Producto productoTemp2 = Producto.builder().idProducto(12).nombre("Leche").precio(40.50).build();
+    CantidadProductos cantidadProductosTemp =
+        CantidadProductos.builder()
+            .productoIdWrapper(ProductoIdWrapper.builder().producto(productoTemp).build())
+            .cantidad(3)
+            .build();
+    CantidadProductos cantidadProductosTemp2 =
+        CantidadProductos.builder()
+            .productoIdWrapper(ProductoIdWrapper.builder().producto(productoTemp2).build())
+            .cantidad(2)
+            .build();
+    List<CantidadProductos> cantidadProductos = new ArrayList<>();
+    cantidadProductos.add(cantidadProductosTemp);
+    cantidadProductos.add(cantidadProductosTemp2);
+    Factura facturaTemp = Factura.builder().fecha(LocalDate.of(2020,05,05)).productosList(cantidadProductos).build();
+    Cliente clienteTemp = clienteRepository.findById(3).get();
+    clienteTemp.setFacturas(Arrays.asList(facturaTemp));
+    clienteRepository.save(clienteTemp);
+    
+
+
   }
 }
