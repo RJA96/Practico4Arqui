@@ -1,3 +1,4 @@
+const defaultUrl = "http://localhost:8080/";
 function generateTable(json,cols,container,cm,entity){
     container.innerHTML = "";
     let table = document.createElement("table");
@@ -28,7 +29,9 @@ function generateTableRows(json,body,table,cm,entity){
             td.append(element[key]);
             tr.appendChild(td);
         }
-        generateImagesForUpdateAndDelete(tr,element,cm,entity);
+        if(cm != null){
+            generateImagesForUpdateAndDelete(tr,element,cm,entity);
+        }
         body.appendChild(tr);
     });
     table.appendChild(body);
@@ -72,7 +75,7 @@ function hideRow(img,tr,entity){
     return () => {
         tr.className = "d-none";
         let intel = img.getAttribute("intel");
-        // deleteRow(intel,entity);
+        deleteRow(intel,entity);
     }
 }
 function deleteRow(intel,entity){
@@ -231,129 +234,98 @@ function updateFactura(entity){
     let url = entity.getUrl + entity.getUpdate;
     fetchWithMethodAndBody(url,"PUT",body);
 }
-function fetchJsonIntoTable(url,cols,container,cm,entity){
-    // fetch(url)
-    //     .then(r => r.json())
-    //     .then(json => {
-    //     generateTable(json,cols,container,cm);
-    // })
-    generateTable(url,cols,container,cm,entity);
+function saveStock(entity){
+    let producto = inputProductoStock.value;
+    let cantidad = inputCantidadStock.value;
+    let body = {
+        "producto": producto,
+        "cantidad": cantidad,
+    };
+    let url = entity.getUrl + entity.getSave;
+    fetchWithMethodAndBody(url,"POST",body);
 }
-function fetchJsonIntoReport(url,container){
+function updateStock(entity){
+    let producto = inputProductoStock.value;
+    let cantidad = inputCantidadStock.value;
+    let id = inputIdStock.value;
+    let body = {
+        "id": id,
+        "producto": producto,
+        "cantidad": cantidad
+    };
+    let url = entity.getUrl + entity.getUpdate;
+    fetchWithMethodAndBody(url,"PUT",body);
+}
+function fetchJsonIntoTable(url,cols,container,cm,entity){
     fetch(url)
         .then(r => r.json())
         .then(json => {
-        generateTable(json,container);        
+        generateTable(json,cols,container,cm,entity);
     })
 }
-function fetchWithMethodAndBody(url,method,jsonBody){
+function fetchWithMethodAndBody(url,meth,jsonBody){
     fetch(url, {
-        method: method,
+        method: meth,
         headers: {
             "Content-type": "application/json"
         },
         body: JSON.stringify(jsonBody)
     });
 }
-function fetchWithMethod(url,method){
+function fetchWithMethod(url,meth){
     fetch(url, {
-        method: method,
+        method: meth,
         headers: {
             "Content-type": "application/json"
         }
     });
 }
+function submitCliente(){
+    if(switcherCliente.checked == true){
+        updateCliente(ClienteController);
+    }else{
+        saveCliente(ClienteController);
+    }
+}
+function submitProducto(){
+    if(switcherProducto.checked == true){
+        updateProducto(ProductoController);
+    }else{
+        saveProducto(ProductoController);
+    }
+}
+function submitFactura(){
+    if(switcherFactura.checked == true){
+        updateFactura(FacturaController);
+    }else{
+        saveFactura(FacturaController);
+    }
+}
+function submitStock(){
+    if(switcherStock.checked == true){
+        updateStock(StockController);
+    }else{
+        saveStock(StockController);
+    }
+}
+function buscarVentas(){
+    let fecha = document.querySelector("#inputFechaVentas").value;
+    if(fecha == ""){
+        buscarTodasLasVentas();
+    }else{
+        buscarVentasConFecha(fecha);
+    }
+}
+function buscarTodasLasVentas(){
+    let url = defaultUrl + "...";
+    fetchJsonIntoTable(url,colsReporteVentas,reporteVentasContainer,null,null);
+}
+function buscarVentasConFecha(fecha){
+    let url = defaultUrl + "..." + fecha;
+    fetchJsonIntoTable(url,colsReporteVentas,reporteVentasContainer,null,null);
+}
 
-let arrayCliente = [
-    {
-        "id": 1,
-        "nombre": "Julian"
-    },
-    {
-        "id": 2,
-        "nombre": "Batman"
-    },
-    {
-        "id": 3,
-        "nombre": "Kratos"
-    },
-    {
-        "id": 4,
-        "nombre": "Matrix"
-    }
-];
-let arrayProducto = [
-    {
-        "id": 1,
-        "nombre": "Pepas",
-        "precio": 30
-    },
-    {
-        "id": 2,
-        "nombre": "Naranja",
-        "precio": 50
-    },
-    {
-        "id": 3,
-        "nombre": "Sandia",
-        "precio": 14
-    },
-    {
-        "id": 4,
-        "nombre": "Pera",
-        "precio": 99
-    }
-];
-let arrayFactura = [
-    {
-        "id": 1,
-        "cliente": 1,
-        "fecha": "2020-05-10",
-        "monto": 30
-    },
-    {
-        "id": 2,
-        "cliente": 2,
-        "fecha": "2020-04-11",
-        "monto": 35
-    },
-    {
-        "id": 3,
-        "cliente": 3,
-        "fecha": "2020-07-28",
-        "monto": 40
-    },
-    {
-        "id": 4,
-        "cliente": 4,
-        "fecha": "2020-02-11",
-        "monto": 66
-    }
-];
-let arrayStock = [
-    {
-        "id": 1,
-        "producto": 1,
-        "cantidad": 30
-    },
-    {
-        "id": 2,
-        "producto": 2,
-        "monto": 35
-    },
-    {
-        "id": 3,
-        "producto": 3,
-        "monto": 40
-    },
-    {
-        "id": 4,
-        "producto": 4,
-        "monto": 66
-    }
-];
-
-// cols for thead of abms
+// cols for theads
 let clienteCols = [];
 clienteCols.push("ID");
 clienteCols.push("Nombre");
@@ -382,11 +354,31 @@ stockCols.push("Cantidad");
 stockCols.push("Modificación");
 stockCols.push("Baja");
 
+let colsReporteClientes = [];
+colsReporteClientes.push("ID");
+colsReporteClientes.push("Nombre");
+colsReporteClientes.push("Total");
+
+let colsReporteVentas = [];
+colsReporteVentas.push("ID");
+colsReporteVentas.push("Cliente");
+colsReporteVentas.push("Fecha");
+colsReporteVentas.push("Monto");
+
+let colsHistorico = [];
+colsHistorico.push("ID");
+colsHistorico.push("Nombre");
+colsHistorico.push("Precio");
+colsHistorico.push("Total");
+
 // containers
 let abmClienteContainer = document.querySelector("#abmClienteContainer");
 let abmProductoContainer = document.querySelector("#abmProductoContainer");
 let abmFacturaContainer = document.querySelector("#abmFacturaContainer");
 let abmStockContainer = document.querySelector("#abmControlStockContainer");
+let reporteClientesContainer = document.querySelector("#reporteClientesContainer");
+let reporteVentasContainer = document.querySelector("#reporteVentasContainer");
+let historicoContainer = document.querySelector("#historicoContainer");
 
 // images paths
 let updateImgPath = "images/edit.png";
@@ -423,35 +415,35 @@ stockSwitch.getSwitcher.addEventListener("click",changeBetweenPostAndPut(stockSw
 
 // modals ids
 let clienteABMModal = "#clienteABMmodal";
-let prodcutoABMModal = "#productoABMmodal";
+let productoABMModal = "#productoABMmodal";
 let facturaABMModal = "#facturaABMmodal";
 let stockABMModal = "#controlStockABMmodal";
 
 // cliente's modal inputs 
-let inputIdCliente = document.querySelector("#inputIdCliente");
+let inputIdCliente = inputCliente;
 let inputNombreCliente = document.querySelector("#inputNombreCliente");
 
 // producto's modal inputs
-let inputIdProducto = document.querySelector("#inputIdProducto");
+let inputIdProducto = inputProducto;
 let inputNombreProducto = document.querySelector("#inputNombreProducto");
 let inputPrecioProducto = document.querySelector("#inputPrecioProducto");
 
 // factura's modal inputs
-let inputIdFactura = document.querySelector("#inputIdFactura");
+let inputIdFactura = inputFactura;
 let inputClienteFactura = document.querySelector("#inputClienteFactura");
 let inputFechaFactura = document.querySelector("#inputFechaFactura");
 let inputMontoFactura = document.querySelector("#inputMontoFactura");
 
 // controlStock's modal inputs
+let inputIdStock = inputStock;
 let inputProductoStock = document.querySelector("#inputProductoControlStock");
 let inputCantidadStock = document.querySelector("#inputCantidadControlStock");
-let inputIdStock = document.querySelector("#inputIdControlStock");
 
 let clienteCustomModal = new customModal(clienteABMModal,clienteSwitch);
 clienteCustomModal.addInput = inputIdCliente;
 clienteCustomModal.addInput = inputNombreCliente;
 
-let productoCustomModal = new customModal(prodcutoABMModal,productoSwitch);
+let productoCustomModal = new customModal(productoABMModal,productoSwitch);
 productoCustomModal.addInput = inputIdProducto;
 productoCustomModal.addInput = inputNombreProducto;
 productoCustomModal.addInput = inputPrecioProducto;
@@ -467,34 +459,46 @@ stockCustomModal.addInput = inputProductoStock;
 stockCustomModal.addInput = inputCantidadStock;
 stockCustomModal.addInput = inputIdStock;
 
-const defaultUrl = "http://localhost:8080/";
-
 let ClienteController = new EntityController("clientes");
 let ProductoController = new EntityController("productos");
 let FacturaController = new EntityController("facturas");
 let StockController = new EntityController("controlStock");
 
-// launch abms
+// launch abms and reports
 document.querySelector(".cliente").addEventListener("click",() =>{
     let url = ClienteController.getUrl + ClienteController.getAll;
-    fetchJsonIntoTable(arrayCliente,clienteCols,abmClienteContainer,clienteCustomModal,ClienteController);
+    fetchJsonIntoTable(url,clienteCols,abmClienteContainer,clienteCustomModal,ClienteController);
 });
 document.querySelector(".producto").addEventListener("click",() =>{
     let url = ProductoController.getUrl + ProductoController.getAll;
-    fetchJsonIntoTable(arrayProducto,productoCols,abmProductoContainer,productoCustomModal,ProductoController);
+    fetchJsonIntoTable(url,productoCols,abmProductoContainer,productoCustomModal,ProductoController);
 });
 document.querySelector(".factura").addEventListener("click",() =>{
     let url = FacturaController.getUrl + FacturaController.getAll;
-    fetchJsonIntoTable(arrayFactura,facturaCols,abmFacturaContainer,facturaCustomModal,FacturaController);
+    fetchJsonIntoTable(url,facturaCols,abmFacturaContainer,facturaCustomModal,FacturaController);
 });
 document.querySelector(".stock").addEventListener("click",() =>{
     let url = StockController.getUrl + StockController.getAll;
-    fetchJsonIntoTable(arrayStock,stockCols,abmStockContainer,stockCustomModal,StockController);
+    fetchJsonIntoTable(url,stockCols,abmStockContainer,stockCustomModal,StockController);
+});
+document.querySelector(".reporteClientes").addEventListener("click",() =>{
+    let url = defaultUrl + "reporteClientes";
+    fetchJsonIntoTable(url,colsReporteClientes,reporteClientesContainer,null,null);
+});
+document.querySelector(".historico").addEventListener("click",() =>{
+    let url = defaultUrl + "productoHistorico";
+    fetchJsonIntoTable(url,colsHistorico,historicoContainer,null,null);
 });
 
+// submit modals buttons
+document.querySelector("#submitCliente").addEventListener("click",submitCliente);
+document.querySelector("#submitProducto").addEventListener("click",submitProducto);
+document.querySelector("#submitFactura").addEventListener("click",submitFactura);
+document.querySelector("#submitControlStock").addEventListener("click",submitStock);
+document.querySelector("#buscarVentasPorFecha").addEventListener("click",buscarVentas);
+
 function readyy(){
-    console.log("breo");
+    console.log("document ready");
     let url = ClienteController.getUrl + ClienteController.getAll;
-    // generateTable(array,clienteCols,abmClienteContainer,clienteCustomModal,ClienteController)
-    fetchJsonIntoTable(arrayCliente,clienteCols,abmClienteContainer,clienteCustomModal,ClienteController);
+    fetchJsonIntoTable(url,clienteCols,abmClienteContainer,clienteCustomModal,ClienteController);
 }
