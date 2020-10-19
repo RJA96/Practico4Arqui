@@ -1,5 +1,6 @@
 package com.grupo7.practico.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.ArrayList;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,7 @@ public class Cliente implements Serializable {
 
   String nombre;
 
+  @JsonIgnore
   @OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
   List<Factura> facturas = new ArrayList<>();
 

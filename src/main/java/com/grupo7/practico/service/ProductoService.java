@@ -11,4 +11,6 @@ public interface ProductoService {
   void updateProducto(Producto producto);
 
   void deleteProducto(Integer id);
+
+  Producto findByMostBuy();
 }

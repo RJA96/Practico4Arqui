@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/clientes")
+@CrossOrigin(origins = "*")
 public class ClienteController {
 
   private static Logger logger = LoggerFactory.getLogger(ClienteController.class);
@@ -58,5 +60,10 @@ public class ClienteController {
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente no encontrado");
     }
+  }
+
+  @GetMapping("/getReporte")
+  public ResponseEntity<?> getReporte() {
+    return ResponseEntity.ok().body(clienteService.getReporte());
   }
 }

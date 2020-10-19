@@ -160,7 +160,7 @@ public class DataLoader implements ApplicationRunner {
     List<CantidadProductos> cantidadProductos = new ArrayList<>();
     cantidadProductos.add(cantidadProductosTemp);
     cantidadProductos.add(cantidadProductosTemp2);
-    Factura facturaTemp = Factura.builder().fecha(LocalDate.of(2020,05,05)).productosList(cantidadProductos).build();
+    Factura facturaTemp = Factura.builder().fecha(LocalDate.of(2020,05,05)).productosList(cantidadProductos).monto(204.00).build();
     Cliente clienteTemp = clienteRepository.findById(3).get();
     clienteTemp.setFacturas(Arrays.asList(facturaTemp));
     clienteRepository.save(clienteTemp);

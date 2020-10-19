@@ -6,6 +6,7 @@ import com.grupo7.practico.model.Factura;
 import com.grupo7.practico.repository.CantidadProductosRepository;
 import com.grupo7.practico.repository.ClienteRepository;
 import com.grupo7.practico.repository.FacturaRepository;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import javassist.NotFoundException;
@@ -65,5 +66,10 @@ public class FacturaServiceImpl implements FacturaService {
     } else {
       throw new NotFoundException("No existe el Cliente indicado");
     }
+  }
+
+  @Override
+  public List<Factura> getByFecha(LocalDate fecha) {
+    return facturaRepository.findByFecha(fecha);
   }
 }
