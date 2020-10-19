@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,5 +28,11 @@ public class Cliente implements Serializable {
 
   String nombre;
 
-  @OneToMany List<Factura> facturas = new ArrayList<>();
+  @OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
+  List<Factura> facturas = new ArrayList<>();
+
+  public void addFactura(Factura factura) {
+    this.facturas.add(factura);
+  }
+
 }
