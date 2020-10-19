@@ -30,7 +30,7 @@ public class ControlStockController {
   }
 
   @PostMapping
-  @RequestMapping("/crearStock")
+  @RequestMapping("/save")
   public ResponseEntity<?> createStock(@RequestBody StockRequest stockRequest) {
     try {
       controlStockService.createStock(stockRequest.getProducto(), stockRequest.getCantidad());
@@ -42,7 +42,7 @@ public class ControlStockController {
   }
 
   @PutMapping
-  @RequestMapping("/añadirStock")
+  @RequestMapping("/update")
   public ResponseEntity<?> addStock(@RequestBody StockRequest stockRequest) {
     try {
       controlStockService.addStock(stockRequest.getProducto(), stockRequest.getCantidad());
@@ -55,7 +55,7 @@ public class ControlStockController {
   }
 
   @GetMapping
-  @RequestMapping("/getStock")
+  @RequestMapping("/getAll")
   public ResponseEntity<?> getStock() {
     try {
       return ResponseEntity.ok().body(controlStockService.getAll());
@@ -65,7 +65,7 @@ public class ControlStockController {
   }
 
   @DeleteMapping
-  @RequestMapping("/deleteStock")
+  @RequestMapping("/delete")
   public ResponseEntity<?> deleteStock(@RequestParam Integer id) {
     try {
       controlStockService.deleteStock(id);
