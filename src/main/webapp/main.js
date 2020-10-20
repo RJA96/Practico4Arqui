@@ -7,7 +7,7 @@ function generateTable(json,cols,container,cm,entity){
     thead.className = "thead-dark";
     let tbody = document.createElement("tbody");
     generateTableHead(cols,table,thead);
-    generateTableRows(json,tbody,table,cm,entity);
+    // generateTableRows(json,tbody,table,cm,entity);
     container.appendChild(table);
 }
 function generateTableHead(cols,table,thead){
@@ -30,13 +30,14 @@ function generateTableRows(json,body,table,cm,entity){
             tr.appendChild(td);
         }
         if(cm != null){
-            generateImagesForUpdateAndDelete(tr,element,cm,entity);
+            generateImageForUpdate(tr,element,cm);
+            generateImageForDelete(tr,element,entity);
         }
         body.appendChild(tr);
     });
     table.appendChild(body);
 }
-function generateImagesForUpdateAndDelete(tr,json,cm,entity){
+function generateImageForUpdate(tr,json,cm){
     let tdUpdate = document.createElement("td");
     let imgUpdate = document.createElement("img");
     imgUpdate.setAttribute("src",updateImgPath);
@@ -51,12 +52,13 @@ function generateImagesForUpdateAndDelete(tr,json,cm,entity){
     imgUpdate.addEventListener("click", putValuesOnUpdateInput(imgUpdate,cm));
     tdUpdate.append(imgUpdate);
     tr.appendChild(tdUpdate);
-
+}
+function generateImageForDelete(tr,id,entity){
     let tdDelete = document.createElement("td");
     let imgDelete = document.createElement("img");
     imgDelete.setAttribute("src",deleteImgPath);
-    console.log(json)
-    imgDelete.setAttribute("intel",json.id);
+    console.log("id en generateImageForDelete: "+id);
+    imgDelete.setAttribute("intel",id);
     imgDelete.addEventListener("click", hideRow(imgDelete,tr,entity));
     tdDelete.append(imgDelete);
     tr.appendChild(tdDelete);
@@ -70,7 +72,6 @@ function putValuesOnUpdateInput(img,cm){
         }
         turnOnUpdateSwitch(cm.getCustomSwitch);
     };
-    // cuando pones el switch en off te vacia los inputs
 }
 function hideRow(img,tr,entity){
     return () => {
@@ -146,12 +147,13 @@ class customModal{
     }
 }
 class EntityController{
-    constructor(url){
+    constructor(url,name){
         this.url = defaultUrl + url;
-        this.delete = "/delete/?id=";
+        this.delete = "/delete?id" + this.name + "=";
         this.save = "/save";
         this.update = "/update";
         this.get = "/getAll";
+        this.name = name;
     }
     get getUrl(){
         return this.url;
@@ -167,6 +169,9 @@ class EntityController{
     }
     get getAll(){
         return this.get;
+    }
+    get getName(){
+        return this.name;
     }
 }
 function saveCliente(entity){
@@ -319,11 +324,19 @@ function buscarVentas(){
 }
 function buscarTodasLasVentas(){
     let url = defaultUrl + "facturas/getAll"; //TODO
-    fetchJsonIntoTable(url,colsReporteVentas,reporteVentasContainer,null,null);
+    fetch(url)
+        .then(r => r.json())
+        .then(json => {
+        generarFacturaCRUD(json,colsReporteVentas,reporteVentasContainer,null,null);
+    })
 }
 function buscarVentasConFecha(fecha){
-    let url = defaultUrl + "getByFecha?date=" + fecha; //TODO en espera de enpoint definitivo
-    fetchJsonIntoTable(url,colsReporteVentas,reporteVentasContainer,null,null);
+    let url = defaultUrl + "facturas/getByFecha?date=" + fecha; //TODO en espera de enpoint definitivo
+    fetch(url)
+        .then(r => r.json())
+        .then(json => {
+        generarFacturaCRUD(json,colsReporteVentas,reporteVentasContainer,null,null);
+    })
 }
 
 // cols for theads
@@ -342,14 +355,12 @@ productoCols.push("Baja");
 
 let facturaCols = [];
 facturaCols.push("ID");
-facturaCols.push("Cliente");
 facturaCols.push("Fecha");
 facturaCols.push("Monto");
 facturaCols.push("Modificación");
 facturaCols.push("Baja");
 
 let stockCols = [];
-stockCols.push("ID");
 stockCols.push("Producto");
 stockCols.push("Cantidad");
 stockCols.push("Modificación");
@@ -362,7 +373,6 @@ colsReporteClientes.push("Total");
 
 let colsReporteVentas = [];
 colsReporteVentas.push("ID");
-colsReporteVentas.push("Cliente");
 colsReporteVentas.push("Fecha");
 colsReporteVentas.push("Monto");
 
@@ -370,7 +380,6 @@ let colsHistorico = [];
 colsHistorico.push("ID");
 colsHistorico.push("Nombre");
 colsHistorico.push("Precio");
-colsHistorico.push("Total");
 
 // containers
 let abmClienteContainer = document.querySelector("#abmClienteContainer");
@@ -460,35 +469,74 @@ stockCustomModal.addInput = inputProductoStock;
 stockCustomModal.addInput = inputCantidadStock;
 stockCustomModal.addInput = inputIdStock;
 
-let ClienteController = new EntityController("clientes");
-let ProductoController = new EntityController("productos");
-let FacturaController = new EntityController("facturas");
-let StockController = new EntityController("controlStock");
+let ClienteController = new EntityController("clientes","Cliente");
+let ProductoController = new EntityController("productos","Producto");
+let FacturaController = new EntityController("facturas","Factura");
+let StockController = new EntityController("controlStock","Stock");
 
 // launch abms and reports
 document.querySelector(".cliente").addEventListener("click",() =>{
     let url = ClienteController.getUrl + ClienteController.getAll;
-    fetchJsonIntoTable(url,clienteCols,abmClienteContainer,clienteCustomModal,ClienteController);
+    fetch(url)
+        .then(r => r.json())
+        .then(json => {
+        generarClienteCRUD(json,clienteCols,abmClienteContainer,clienteCustomModal,ClienteController);
+    })
+    // fetchJsonIntoTable(url,clienteCols,abmClienteContainer,clienteCustomModal,ClienteController);
 });
 document.querySelector(".producto").addEventListener("click",() =>{
     let url = ProductoController.getUrl + ProductoController.getAll;
-    fetchJsonIntoTable(url,productoCols,abmProductoContainer,productoCustomModal,ProductoController);
+    fetch(url)
+        .then(r => r.json())
+        .then(json => {
+        generarProductoCRUD(json,productoCols,abmProductoContainer,productoCustomModal,ProductoController);
+    })
+    // fetchJsonIntoTable(url,productoCols,abmProductoContainer,productoCustomModal,ProductoController);
 });
 document.querySelector(".factura").addEventListener("click",() =>{
     let url = FacturaController.getUrl + FacturaController.getAll;
-    fetchJsonIntoTable(url,facturaCols,abmFacturaContainer,facturaCustomModal,FacturaController);
+    fetch(url)
+        .then(r => r.json())
+        .then(json => {
+        generarFacturaCRUD(json,facturaCols,abmFacturaContainer,facturaCustomModal,FacturaController);
+    })
+    // fetchJsonIntoTable(url,facturaCols,abmFacturaContainer,facturaCustomModal,FacturaController);
 });
 document.querySelector(".stock").addEventListener("click",() =>{
     let url = StockController.getUrl + StockController.getAll;
-    fetchJsonIntoTable(url,stockCols,abmStockContainer,stockCustomModal,StockController);
+    fetch(url)
+        .then(r => r.json())
+        .then(json => {
+        generarStockCRUD(json,stockCols,abmStockContainer,stockCustomModal,StockController);
+    })
+    // fetchJsonIntoTable(url,stockCols,abmStockContainer,stockCustomModal,StockController);
 });
 document.querySelector(".reporteClientes").addEventListener("click",() =>{
     let url = defaultUrl + "reporteClientes";
-    fetchJsonIntoTable(url,colsReporteClientes,reporteClientesContainer,null,null);
+    fetch(url)
+        .then(r => r.json())
+        .then(json => {
+        generarClienteCRUD(json,colsReporteClientes,reporteClientesContainer,null,null);
+    })
+    // fetchJsonIntoTable(url,colsReporteClientes,reporteClientesContainer,null,null);
 });
 document.querySelector(".historico").addEventListener("click",() =>{
     let url = defaultUrl + "productoHistorico";
-    fetchJsonIntoTable(url,colsHistorico,historicoContainer,null,null);
+    fetch(url)
+        .then(r => r.json())
+        .then(json => {
+        generarTablaHistorico(json,colsHistorico,historicoContainer);
+    })
+    // fetchJsonIntoTable(url,colsHistorico,historicoContainer,null,null);
+});
+document.querySelector(".reporteVentas").addEventListener("click",() =>{
+    let url = defaultUrl + "reporteVentas";
+    fetch(url)
+        .then(r => r.json())
+        .then(json => {
+        generarFacturaCRUD(json,colsHistorico,historicoContainer,null,null);
+    })
+    // fetchJsonIntoTable(url,colsHistorico,historicoContainer,null,null);
 });
 
 // submit modals buttons
@@ -501,5 +549,149 @@ document.querySelector("#buscarVentasPorFecha").addEventListener("click",buscarV
 function readyy(){
     console.log("document ready");
     let url = ClienteController.getUrl + ClienteController.getAll;
-    fetchJsonIntoTable(url,clienteCols,abmClienteContainer,clienteCustomModal,ClienteController);
+    generarClienteCRUD(url,clienteCols,abmClienteContainer,clienteCustomModal,ClienteController);
+}
+
+function generarFacturaCRUD(json,cols,container,cm,entity){
+    container.innerHTML = "";
+    let table = document.createElement("table");
+    table.className = "table table-striped marginTopTabla";
+    let thead = document.createElement("thead");
+    thead.className = "thead-dark";
+    let tbody = document.createElement("tbody");
+    generateTableHead(cols,table,thead);
+    generarRowsFacturaCRUD(json,tbody,table,cm,entity);
+    container.appendChild(table);   
+}
+function generarRowsFacturaCRUD(json,body,table,cm,entity){
+    json.forEach(element => {
+        let tr = document.createElement("tr");
+        let tdId = document.createElement("td");
+        let tdFecha = document.createElement("td");
+        let tdMonto = document.createElement("td");
+        tdId.append(element.idFactura);
+        tdFecha.append(element.fecha);
+        tdMonto.append(element.monto);
+        tr.appendChild(tdId);
+        tr.appendChild(tdFecha);
+        tr.appendChild(tdMonto);
+        if(cm != null){
+            generateImageForUpdate(tr,element,cm);
+            generateImageForDelete(tr,element.idFactura,entity);
+        }
+        body.appendChild(tr);
+    });
+    table.appendChild(body);
+}
+function generarClienteCRUD(json,cols,container,cm,entity){
+    container.innerHTML = "";
+    let table = document.createElement("table");
+    table.className = "table table-striped marginTopTabla";
+    let thead = document.createElement("thead");
+    thead.className = "thead-dark";
+    let tbody = document.createElement("tbody");
+    generateTableHead(cols,table,thead);
+    generarRowsClienteCRUD(json,tbody,table,cm,entity);
+    container.appendChild(table);   
+}
+function generarRowsClienteCRUD(json,body,table,cm,entity){
+    json.forEach(element => {
+        let tr = document.createElement("tr");
+        let tdId = document.createElement("td");
+        let tdNombre = document.createElement("td");
+        tdId.append(element.idCliente);
+        tdNombre.append(element.nombre);
+        tr.appendChild(tdId);
+        tr.appendChild(tdNombre);
+        if(cm != null){
+            generateImageForUpdate(tr,element,cm);
+            generateImageForDelete(tr,element.idCliente,entity);
+        }
+        body.appendChild(tr);
+    });
+    table.appendChild(body);
+}
+function generarStockCRUD(json,cols,container,cm,entity){
+    container.innerHTML = "";
+    let table = document.createElement("table");
+    table.className = "table table-striped marginTopTabla";
+    let thead = document.createElement("thead");
+    thead.className = "thead-dark";
+    let tbody = document.createElement("tbody");
+    generateTableHead(cols,table,thead);
+    generarRowsStockCRUD(json,tbody,table,cm,entity);
+    container.appendChild(table);   
+}
+function generarRowsStockCRUD(json,body,table,cm,entity){
+    json.forEach(element => {
+        let tr = document.createElement("tr");
+        let tdId = document.createElement("td");
+        let tdCantidad = document.createElement("td");
+        tdId.append(element.productoIdWrapper.idProducto);
+        tdCantidad.append(element.cantidadStock);
+        tr.appendChild(tdId);
+        tr.appendChild(tdCantidad);
+        if(cm != null){
+            generateImageForUpdate(tr,element,cm);
+            generateImageForDelete(tr,element.productoIdWrapper.idProducto,entity);
+        }
+        body.appendChild(tr);
+    });
+    table.appendChild(body);
+}
+function generarProductoCRUD(json,cols,container,cm,entity){
+    container.innerHTML = "";
+    let table = document.createElement("table");
+    table.className = "table table-striped marginTopTabla";
+    let thead = document.createElement("thead");
+    thead.className = "thead-dark";
+    let tbody = document.createElement("tbody");
+    generateTableHead(cols,table,thead);
+    generarRowsProductoCRUD(json,tbody,table,cm,entity);
+    container.appendChild(table);   
+}
+function generarRowsProductoCRUD(json,body,table,cm,entity){
+    json.forEach(element => {
+        let tr = document.createElement("tr");
+        let tdId = document.createElement("td");
+        let tdNombre = document.createElement("td");
+        let tdPrecio = document.createElement("td");
+        tdId.append(element.idProducto);
+        tdNombre.append(element.nombre);
+        tdPrecio.append(element.precio);
+        tr.appendChild(tdId);
+        tr.appendChild(tdNombre);
+        tr.appendChild(tdPrecio);
+        if(cm != null){
+            generateImageForUpdate(tr,element,cm);
+            generateImageForDelete(tr,element.idProducto,entity);
+        }
+        body.appendChild(tr);
+    });
+    table.appendChild(body);
+}
+function generarTablaHistorico(json,cols,container){
+    container.innerHTML = "";
+    let table = document.createElement("table");
+    table.className = "table table-striped marginTopTabla";
+    let thead = document.createElement("thead");
+    thead.className = "thead-dark";
+    let tbody = document.createElement("tbody");
+    generateTableHead(cols,table,thead);
+    generarRowHistorico(json,tbody,table);
+    container.appendChild(table);      
+}
+function generarRowHistorico(json,body,table){
+    let tr = document.createElement("tr");
+    let tdId = document.createElement("td");
+    let tdNombre = document.createElement("td");
+    let tdPrecio = document.createElement("td");
+    tdId.append(json.idProducto);
+    tdNombre.append(json.nombre);
+    tdPrecio.append(json.precio);
+    tr.appendChild(tdId);
+    tr.appendChild(tdNombre);
+    tr.appendChild(tdPrecio);
+    body.appendChild(tr);
+    table.appendChild(body);
 }
