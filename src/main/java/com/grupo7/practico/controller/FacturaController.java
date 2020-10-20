@@ -64,7 +64,7 @@ public class FacturaController {
   }
 
   @GetMapping("/getByFecha")
-  public ResponseEntity<?> getByFecha(@RequestParam("date") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate date) {
+  public ResponseEntity<?> getByFecha(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
     List<Factura> factura = facturaService.getByFecha(date);
     return ResponseEntity.status(HttpStatus.OK).body(factura);
   }

@@ -521,7 +521,7 @@ document.querySelector(".reporteClientes").addEventListener("click",() =>{
     // fetchJsonIntoTable(url,colsReporteClientes,reporteClientesContainer,null,null);
 });
 document.querySelector(".historico").addEventListener("click",() =>{
-    let url = defaultUrl + "productoHistorico";
+    let url = defaultUrl + "productos/getByMostBuy";
     fetch(url)
         .then(r => r.json())
         .then(json => {
@@ -530,7 +530,7 @@ document.querySelector(".historico").addEventListener("click",() =>{
     // fetchJsonIntoTable(url,colsHistorico,historicoContainer,null,null);
 });
 document.querySelector(".reporteVentas").addEventListener("click",() =>{
-    let url = defaultUrl + "reporteVentas";
+    let url = defaultUrl + "facturas/getByFecha";
     fetch(url)
         .then(r => r.json())
         .then(json => {
