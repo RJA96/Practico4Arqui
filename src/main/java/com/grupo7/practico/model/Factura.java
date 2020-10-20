@@ -29,5 +29,7 @@ public class Factura implements Serializable {
 
   LocalDate fecha;
 
+  Double monto;
+
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) List<CantidadProductos> productosList;
 }

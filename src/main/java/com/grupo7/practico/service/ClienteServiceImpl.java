@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.grupo7.practico.model.Cliente;
 import com.grupo7.practico.repository.ClienteRepository;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import javassist.NotFoundException;
 import lombok.SneakyThrows;
@@ -49,5 +50,10 @@ public class ClienteServiceImpl implements ClienteService {
     } else {
       throw new NotFoundException("No existe el Cliente indicado");
     }
+  }
+
+  @Override
+  public Map<Cliente, Double> getReporte() {
+    return clienteRepository.findAllByFacturasAndGastos();
   }
 }

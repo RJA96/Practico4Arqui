@@ -55,6 +55,7 @@ function generateImagesForUpdateAndDelete(tr,json,cm,entity){
     let tdDelete = document.createElement("td");
     let imgDelete = document.createElement("img");
     imgDelete.setAttribute("src",deleteImgPath);
+    console.log(json)
     imgDelete.setAttribute("intel",json.id);
     imgDelete.addEventListener("click", hideRow(imgDelete,tr,entity));
     tdDelete.append(imgDelete);
@@ -317,11 +318,11 @@ function buscarVentas(){
     }
 }
 function buscarTodasLasVentas(){
-    let url = defaultUrl + "...";
+    let url = defaultUrl + "facturas/getAll"; //TODO
     fetchJsonIntoTable(url,colsReporteVentas,reporteVentasContainer,null,null);
 }
 function buscarVentasConFecha(fecha){
-    let url = defaultUrl + "..." + fecha;
+    let url = defaultUrl + "getByFecha?date=" + fecha; //TODO en espera de enpoint definitivo
     fetchJsonIntoTable(url,colsReporteVentas,reporteVentasContainer,null,null);
 }
 
