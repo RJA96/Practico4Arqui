@@ -16,15 +16,15 @@ public interface ClienteRepository extends CrudRepository<Cliente, Integer> {
       "from cliente c JOIN cliente_facturas cf on c.id_cliente = cf.cliente_id_cliente " +
       "where facturas_id_factura = :id",nativeQuery = true)
   Cliente findByFactura(@Param("id") Integer id);
+
   @Query(
       value =
-          "SELECT c.id_cliente as id, c.nombre as nombre,SUM(cp.cantidad * p.precio) AS suma "
-              + "FROM cliente c JOIN cliente_facturas cf on c.id_cliente = cf.cliente_id_cliente "
+          "SELECT c.id_cliente as id, c.nombre ,SUM(f.monto) AS suma "
+              + "    FROM cliente c "
+              + "        JOIN cliente_facturas cf on c.id_cliente = cf.cliente_id_cliente "
               + "    JOIN factura f on f.id_factura = cf.facturas_id_factura "
-              + "    JOIN factura_productos_list fpl on f.id_factura = fpl.factura_id_factura "
-              + "    JOIN cantidad_productos cp on cp.producto_id_producto = fpl.productos_list_producto_id_producto "
-              + "    JOIN producto p on p.id_producto = cp.producto_id_producto "
               + "    GROUP BY 1,2 "
-              + "ORDER BY 3 DESC", nativeQuery = true)
+              + "ORDER BY 3 DESC",
+      nativeQuery = true)
   List<IReporte> findAllByFacturasAndGastos();
 }

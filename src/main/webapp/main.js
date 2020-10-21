@@ -57,7 +57,6 @@ function generateImageForDelete(tr,id,entity){
     let tdDelete = document.createElement("td");
     let imgDelete = document.createElement("img");
     imgDelete.setAttribute("src",deleteImgPath);
-    console.log("id en generateImageForDelete: "+id);
     imgDelete.setAttribute("intel",id);
     imgDelete.addEventListener("click", hideRow(imgDelete,tr,entity));
     tdDelete.append(imgDelete);
@@ -220,7 +219,6 @@ function saveFactura(entity){
         "fecha": fecha,
         "monto": monto
     };
-    console.log(body)
     let url = entity.getUrl + entity.getSave;
     fetchWithMethodAndBody(url,"POST",body);
 }
@@ -234,7 +232,6 @@ function updateFactura(entity){
         "monto": monto,
         "productosList":[]
     };
-    console.log(body)
     let url = entity.getUrl + entity.getUpdate;
     fetchWithMethodAndBody(url,"PUT",body);
 }
@@ -545,7 +542,6 @@ document.querySelector("#submitControlStock").addEventListener("click",submitSto
 document.querySelector("#buscarVentasPorFecha").addEventListener("click",buscarVentas);
 
 function readyy(){
-    console.log("document ready");
     let url = ClienteController.getUrl + ClienteController.getAll;
     generarClienteCRUD(url,clienteCols,abmClienteContainer,clienteCustomModal,ClienteController);
 }
@@ -705,16 +701,19 @@ function generarTablaReporteCliente(json,cols,container){
     container.appendChild(table);      
 }
 function generarRowsReporteCliente(json,body,table){
-    let tr = document.createElement("tr");
-    let tdId = document.createElement("td");
-    let tdNombre = document.createElement("td");
-    let tdSuma = document.createElement("td");
-    tdId.append(json.id);
-    tdNombre.append(json.nombre);
-    tdSuma.append(json.suma);
-    tr.appendChild(tdId);
-    tr.appendChild(tdNombre);
-    tr.appendChild(tdSuma);
-    body.appendChild(tr);
+    json.forEach(Element => {
+        let tr = document.createElement("tr");
+        let tdId = document.createElement("td");
+        let tdNombre = document.createElement("td");
+        let tdSuma = document.createElement("td");
+        tdId.append(Element.id);
+        tdNombre.append(Element.nombre);
+        tdSuma.append(Element.suma);
+        tr.appendChild(tdId);
+        tr.appendChild(tdNombre);
+        tr.appendChild(tdSuma);
+        body.appendChild(tr);
+    })
+
     table.appendChild(body);
 }
