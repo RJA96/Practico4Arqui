@@ -33,8 +33,8 @@ public class Cliente implements Serializable {
   @OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
   List<Factura> facturas = new ArrayList<>();
 
-  public void addFactura(Factura factura) {
-    this.facturas.add(factura);
+  public void removeFactura(Factura factura) {
+    this.facturas.remove(factura);
   }
 
 }

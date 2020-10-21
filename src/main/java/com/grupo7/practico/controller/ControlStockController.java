@@ -68,10 +68,10 @@ public class ControlStockController {
 
   @DeleteMapping
   @RequestMapping("/delete")
-  public ResponseEntity<?> deleteStock(@RequestParam Integer id) {
+  public ResponseEntity<?> deleteStock(@RequestParam Integer idStock) {
     try {
-      controlStockService.deleteStock(id);
-      return ResponseEntity.ok().body("Eliminado control Stock id: " + id);
+      controlStockService.deleteStock(idStock);
+      return ResponseEntity.ok().body("Eliminado control Stock id: " + idStock);
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Elemento no encontrado");
     }

@@ -9,8 +9,8 @@ import java.util.List;
 public interface FacturaService {
 
   List<Factura> getAll();
-
-  void addFactura(Factura factura, Integer cliente);
+  void addFactura(Factura factura1, Integer cliente);
+  void addFactura(LocalDate fecha, Double monto, Integer cliente);
 
   void updateFactura(Factura factura);
 

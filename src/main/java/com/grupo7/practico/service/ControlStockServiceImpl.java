@@ -34,8 +34,8 @@ public class ControlStockServiceImpl implements ControlStockService {
 
   @SneakyThrows
   @Override
-  public void createStock(Producto producto, Integer cantidad) {
-    Optional<Producto> productoOptional = productoRepository.findById(producto.getIdProducto());
+  public void createStock(Integer producto, Integer cantidad) {
+    Optional<Producto> productoOptional = productoRepository.findById(producto);
     if (productoOptional.isPresent()) {
       ControlStock controlStock =
           ControlStock.builder()
@@ -51,11 +51,12 @@ public class ControlStockServiceImpl implements ControlStockService {
 
   @SneakyThrows
   @Override
-  public void addStock(Producto producto, Integer cantidad) {
+  public void addStock(Integer producto, Integer cantidad) {
+    Optional<Producto> p = productoRepository.findById(producto);
     Optional<ControlStock> controlStockOptional =
         controlStockRepository.findById(
             ProductoIdWrapper.builder()
-                .producto(Producto.builder().idProducto(producto.getIdProducto()).build())
+                .producto(p.get())
                 .build());
     if (controlStockOptional.isPresent()) {
       ControlStock controlStockTemp = controlStockOptional.get();
@@ -69,10 +70,11 @@ public class ControlStockServiceImpl implements ControlStockService {
   @SneakyThrows
   @Override
   public void deleteStock(Integer id) {
+    Optional<Producto> p = productoRepository.findById(id);
     Optional<ControlStock> controlStockOptional =
         controlStockRepository.findById(
             ProductoIdWrapper.builder()
-                .producto(Producto.builder().idProducto(id).build())
+                .producto(p.get())
                 .build());
     if (controlStockOptional.isPresent()) {
       controlStockRepository.delete(controlStockOptional.get());

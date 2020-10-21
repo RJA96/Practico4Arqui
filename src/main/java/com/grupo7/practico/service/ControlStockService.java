@@ -7,9 +7,9 @@ import java.util.List;
 public interface ControlStockService {
   List<ControlStock> getAll();
 
-  void createStock(Producto producto, Integer cantidad);
+  void createStock(Integer producto, Integer cantidad);
 
-  void addStock(Producto producto, Integer cantidad);
+  void addStock(Integer Producto, Integer cantidad);
 
   void deleteStock(Integer id);
 }

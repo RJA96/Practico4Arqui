@@ -1,6 +1,7 @@
 package com.grupo7.practico.controller;
 
 import com.grupo7.practico.controller.request.FacturaClienteRequest;
+import com.grupo7.practico.controller.request.FacturaClienteRequest2;
 import com.grupo7.practico.model.Factura;
 import com.grupo7.practico.service.FacturaService;
 import java.time.LocalDate;
@@ -39,6 +40,12 @@ public class FacturaController {
 
   @PostMapping("/save")
   public ResponseEntity<?> add(@RequestBody FacturaClienteRequest factura) {
+    facturaService.addFactura(factura.getFecha(),factura.getMonto(),factura.getCliente());
+    return ResponseEntity.status(HttpStatus.OK).body(factura);
+  }
+
+  @PostMapping("/saveAs")
+  public ResponseEntity<?> add(@RequestBody FacturaClienteRequest2 factura) {
     facturaService.addFactura(factura.getFactura(),factura.getIdCliente());
     return ResponseEntity.status(HttpStatus.OK).body(factura);
   }
@@ -56,6 +63,7 @@ public class FacturaController {
   @DeleteMapping("/delete")
   public ResponseEntity<?> delete(@RequestParam Integer idFactura) {
     try{
+
       facturaService.deleteFactura(idFactura);
       return ResponseEntity.ok().body("Eliminado la factura id: " + idFactura);
     } catch (Exception e) {
