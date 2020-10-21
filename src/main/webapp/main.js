@@ -514,8 +514,7 @@ document.querySelector(".reporteClientes").addEventListener("click",() =>{
     fetch(url)
         .then(r => r.json())
         .then(json => {
-            console.log(json + json.length)
-        generarClienteCRUD(json,colsReporteClientes,reporteClientesContainer,null,null);
+            generarTablaReporteCliente(json,colsReporteClientes,reporteClientesContainer);
     })
     // fetchJsonIntoTable(url,colsReporteClientes,reporteClientesContainer,null,null);
 });
@@ -691,6 +690,31 @@ function generarRowHistorico(json,body,table){
     tr.appendChild(tdId);
     tr.appendChild(tdNombre);
     tr.appendChild(tdPrecio);
+    body.appendChild(tr);
+    table.appendChild(body);
+}
+function generarTablaReporteCliente(json,cols,container){
+    container.innerHTML = "";
+    let table = document.createElement("table");
+    table.className = "table table-striped marginTopTabla";
+    let thead = document.createElement("thead");
+    thead.className = "thead-dark";
+    let tbody = document.createElement("tbody");
+    generateTableHead(cols,table,thead);
+    generarRowsReporteCliente(json,tbody,table);
+    container.appendChild(table);      
+}
+function generarRowsReporteCliente(json,body,table){
+    let tr = document.createElement("tr");
+    let tdId = document.createElement("td");
+    let tdNombre = document.createElement("td");
+    let tdSuma = document.createElement("td");
+    tdId.append(json.id);
+    tdNombre.append(json.nombre);
+    tdSuma.append(json.suma);
+    tr.appendChild(tdId);
+    tr.appendChild(tdNombre);
+    tr.appendChild(tdSuma);
     body.appendChild(tr);
     table.appendChild(body);
 }
