@@ -49,8 +49,23 @@ public class FacturaServiceImpl implements FacturaService {
 
   @Override
   @SneakyThrows
+  public void addFactura(LocalDate fecha, Double monto, Integer cliente) {
+    Optional<Cliente> clienteOptional = clienteRepository.findById(cliente);
+    if (clienteOptional.isPresent()) {
+      Cliente clientetemp = clienteOptional.get();
+      clientetemp.getFacturas().add(Factura.builder().fecha(fecha).monto(monto).build());
+      clienteRepository.save(clientetemp);
+    } else {
+      throw new NotFoundException("No existe el Cliente indicado");
+    }
+  }
+
+
+  @Override
+  @SneakyThrows
   public void updateFactura(Factura factura) {
-    if (facturaRepository.findById(factura.getIdFactura()).isPresent()) {
+    Optional<Factura> facturaOptional = facturaRepository.findById(factura.getIdFactura());
+    if (facturaOptional.isPresent()) {
       facturaRepository.save(factura);
     } else {
       throw new NotFoundException("No existe la Factura indicada");
@@ -62,9 +77,12 @@ public class FacturaServiceImpl implements FacturaService {
   public void deleteFactura(Integer idFactura) {
     Optional<Factura> facturaOptional = facturaRepository.findById(idFactura);
     if (facturaOptional.isPresent()) {
+      Cliente clienteOptional = clienteRepository.findByFactura(idFactura);
+      clienteOptional.removeFactura(facturaOptional.get());
+      clienteRepository.save(clienteOptional);
       facturaRepository.delete(facturaOptional.get());
     } else {
-      throw new NotFoundException("No existe el Cliente indicado");
+      throw new NotFoundException("No existe la factura Indicada");
     }
   }
 

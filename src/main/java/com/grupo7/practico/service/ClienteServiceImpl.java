@@ -3,6 +3,7 @@ package com.grupo7.practico.service;
 import com.google.common.collect.Lists;
 import com.grupo7.practico.model.Cliente;
 import com.grupo7.practico.repository.ClienteRepository;
+import com.grupo7.practico.repository.IReporte;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -53,7 +54,7 @@ public class ClienteServiceImpl implements ClienteService {
   }
 
   @Override
-  public Map<Cliente, Double> getReporte() {
+  public List<IReporte> getReporte() {
     return clienteRepository.findAllByFacturasAndGastos();
   }
 }

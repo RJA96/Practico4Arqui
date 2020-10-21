@@ -149,11 +149,10 @@ class customModal{
 class EntityController{
     constructor(url,name){
         this.url = defaultUrl + url;
-        this.delete = "/delete?id" + this.name + "=";
+        this.delete = "/delete?id" + name + "=";
         this.save = "/save";
         this.update = "/update";
         this.get = "/getAll";
-        this.name = name;
     }
     get getUrl(){
         return this.url;
@@ -170,9 +169,7 @@ class EntityController{
     get getAll(){
         return this.get;
     }
-    get getName(){
-        return this.name;
-    }
+
 }
 function saveCliente(entity){
     let nombre = inputNombreCliente.value;
@@ -186,7 +183,7 @@ function updateCliente(entity){
     let id = inputIdCliente.value;
     let nombre = inputNombreCliente.value;
     let body = {
-        "id": id,
+        "idCliente": id,
         "nombre": nombre
     };
     let url = entity.getUrl + entity.getUpdate;
@@ -207,7 +204,7 @@ function updateProducto(entity){
     let nombre = inputNombreProducto.value;
     let precio = inputPrecioProducto.value;
     let body = {
-        "id": id,
+        "idProducto": id,
         "nombre": nombre,
         "precio": precio
     };
@@ -223,20 +220,21 @@ function saveFactura(entity){
         "fecha": fecha,
         "monto": monto
     };
+    console.log(body)
     let url = entity.getUrl + entity.getSave;
     fetchWithMethodAndBody(url,"POST",body);
 }
 function updateFactura(entity){
-    let cliente = inputClienteFactura.value;
     let fecha = inputFechaFactura.value;
     let monto = inputMontoFactura.value;
     let id = inputIdFactura.value;
     let body = {
-        "id": id,
-        "cliente": cliente,
+        "idFactura": id,
         "fecha": fecha,
-        "monto": monto
+        "monto": monto,
+        "productosList":[]
     };
+    console.log(body)
     let url = entity.getUrl + entity.getUpdate;
     fetchWithMethodAndBody(url,"PUT",body);
 }
@@ -512,10 +510,11 @@ document.querySelector(".stock").addEventListener("click",() =>{
     // fetchJsonIntoTable(url,stockCols,abmStockContainer,stockCustomModal,StockController);
 });
 document.querySelector(".reporteClientes").addEventListener("click",() =>{
-    let url = defaultUrl + "reporteClientes";
+    let url = defaultUrl + "clientes/getReporte";
     fetch(url)
         .then(r => r.json())
         .then(json => {
+            console.log(json + json.length)
         generarClienteCRUD(json,colsReporteClientes,reporteClientesContainer,null,null);
     })
     // fetchJsonIntoTable(url,colsReporteClientes,reporteClientesContainer,null,null);
@@ -627,13 +626,13 @@ function generarRowsStockCRUD(json,body,table,cm,entity){
         let tr = document.createElement("tr");
         let tdId = document.createElement("td");
         let tdCantidad = document.createElement("td");
-        tdId.append(element.productoIdWrapper.idProducto);
+        tdId.append(element.productoIdWrapper.producto.idProducto);
         tdCantidad.append(element.cantidadStock);
         tr.appendChild(tdId);
         tr.appendChild(tdCantidad);
         if(cm != null){
             generateImageForUpdate(tr,element,cm);
-            generateImageForDelete(tr,element.productoIdWrapper.idProducto,entity);
+            generateImageForDelete(tr,element.productoIdWrapper.producto.idProducto,entity);
         }
         body.appendChild(tr);
     });

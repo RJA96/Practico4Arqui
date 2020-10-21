@@ -1,12 +1,12 @@
 package com.grupo7.practico.controller.request;
 
-import com.grupo7.practico.model.Producto;
+import com.grupo7.practico.model.Factura;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class StockRequest {
-  Integer producto;
-  Integer cantidad;
+public class FacturaClienteRequest2 {
+  Factura factura;
+  Integer idCliente;
 }

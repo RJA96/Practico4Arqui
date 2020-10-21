@@ -16,7 +16,8 @@ import java.io.Serializable;
 @Builder
 public class ControlStock implements Serializable {
 
-  @EmbeddedId ProductoIdWrapper productoIdWrapper;
+  @EmbeddedId
+  ProductoIdWrapper productoIdWrapper;
 
   Integer cantidadStock;
 }

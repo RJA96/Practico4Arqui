@@ -1,6 +1,8 @@
 package com.grupo7.practico.service;
 
 import com.grupo7.practico.model.Cliente;
+import com.grupo7.practico.model.Factura;
+import com.grupo7.practico.repository.IReporte;
 import java.util.List;
 import java.util.Map;
 
@@ -13,5 +15,5 @@ public interface ClienteService {
 
   void deleteCliente(Integer id);
 
-  Map<Cliente,Double> getReporte();
+  List<IReporte> getReporte();
 }
