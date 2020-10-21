@@ -1,9 +1,9 @@
 package com.grupo7.practico.service;
 
 import com.grupo7.practico.model.ControlStock;
-import com.grupo7.practico.model.Producto;
 import java.util.List;
 
+/** Servicio para la logica de ControlStock */
 public interface ControlStockService {
   List<ControlStock> getAll();
 

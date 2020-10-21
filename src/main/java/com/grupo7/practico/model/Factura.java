@@ -31,5 +31,6 @@ public class Factura implements Serializable {
 
   Double monto;
 
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) List<CantidadProductos> productosList;
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  List<CantidadProductos> productosList;
 }

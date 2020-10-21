@@ -14,14 +14,13 @@ import com.grupo7.practico.repository.ProductoRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+/** Componente que carga toda la data inicial. */
 @Component
 public class DataLoader implements ApplicationRunner {
 
@@ -146,7 +145,8 @@ public class DataLoader implements ApplicationRunner {
   private void createFacturas() {
     Producto productoTemp =
         Producto.builder().idProducto(13).nombre("Galletas").precio(20.50).build();
-    Producto productoTemp2 = Producto.builder().idProducto(12).nombre("Leche").precio(40.50).build();
+    Producto productoTemp2 =
+        Producto.builder().idProducto(12).nombre("Leche").precio(40.50).build();
     CantidadProductos cantidadProductosTemp =
         CantidadProductos.builder()
             .productoIdWrapper(ProductoIdWrapper.builder().producto(productoTemp).build())
@@ -160,12 +160,14 @@ public class DataLoader implements ApplicationRunner {
     List<CantidadProductos> cantidadProductos = new ArrayList<>();
     cantidadProductos.add(cantidadProductosTemp);
     cantidadProductos.add(cantidadProductosTemp2);
-    Factura facturaTemp = Factura.builder().fecha(LocalDate.of(2020,05,05)).productosList(cantidadProductos).monto(204.00).build();
+    Factura facturaTemp =
+        Factura.builder()
+            .fecha(LocalDate.of(2020, 05, 05))
+            .productosList(cantidadProductos)
+            .monto(204.00)
+            .build();
     Cliente clienteTemp = clienteRepository.findById(3).get();
     clienteTemp.setFacturas(Arrays.asList(facturaTemp));
     clienteRepository.save(clienteTemp);
-    
-
-
   }
 }

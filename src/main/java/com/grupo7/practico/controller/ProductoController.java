@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/** Controller de producto */
 @RestController
 @RequestMapping("/productos")
 @CrossOrigin(origins = "*")
@@ -58,9 +59,13 @@ public class ProductoController {
     }
   }
 
+  /**
+   * Obtiene el producto mas vendido
+   *
+   * @return Producto mas vendido
+   */
   @GetMapping("/getByMostBuy")
   public Producto getByMostBuy() {
     return productoService.findByMostBuy();
   }
-
 }

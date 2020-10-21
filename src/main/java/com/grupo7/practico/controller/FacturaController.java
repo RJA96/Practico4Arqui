@@ -6,7 +6,6 @@ import com.grupo7.practico.model.Factura;
 import com.grupo7.practico.service.FacturaService;
 import java.time.LocalDate;
 import java.util.List;
-import javax.persistence.criteria.CriteriaBuilder.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -19,9 +18,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Controller de facturas
+ */
 @RestController
 @RequestMapping("facturas")
 @CrossOrigin(origins = "*")
@@ -38,12 +39,22 @@ public class FacturaController {
     return facturaService.getAll();
   }
 
+  /**
+   * Save de facturas para adaptarlo al front
+   * @param factura
+   * @return ResponseEntity
+   */
   @PostMapping("/save")
   public ResponseEntity<?> add(@RequestBody FacturaClienteRequest factura) {
     facturaService.addFactura(factura.getFecha(),factura.getMonto(),factura.getCliente());
     return ResponseEntity.status(HttpStatus.OK).body(factura);
   }
 
+  /**
+   * Save real de facturas (por postman)
+   * @param factura
+   * @return ResponseEntity
+   */
   @PostMapping("/saveAs")
   public ResponseEntity<?> add(@RequestBody FacturaClienteRequest2 factura) {
     facturaService.addFactura(factura.getFactura(),factura.getIdCliente());
@@ -71,6 +82,11 @@ public class FacturaController {
     }
   }
 
+  /**
+   * Endpoint para devolver las facturas de una fecha especifica
+   * @param date
+   * @return facturas por fecha
+   */
   @GetMapping("/getByFecha")
   public ResponseEntity<?> getByFecha(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
     List<Factura> factura = facturaService.getByFecha(date);

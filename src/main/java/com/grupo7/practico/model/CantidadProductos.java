@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/** Esto se realizo para crear un one to many en las facturas para mantener la cantidad de productos */
 @Data
 @Entity
 @NoArgsConstructor

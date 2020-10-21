@@ -13,6 +13,7 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/** Implementacion del servicio de ControlStock */
 @Service
 public class ControlStockServiceImpl implements ControlStockService {
 
@@ -32,6 +33,11 @@ public class ControlStockServiceImpl implements ControlStockService {
     return Lists.newArrayList(controlStockRepository.findAll());
   }
 
+  /**
+   * Para crear el stock primero revisa si existe el producto
+   * @param producto
+   * @param cantidad
+   */
   @SneakyThrows
   @Override
   public void createStock(Integer producto, Integer cantidad) {
@@ -49,6 +55,11 @@ public class ControlStockServiceImpl implements ControlStockService {
     }
   }
 
+  /**
+   * Para añadir stock primero revisa si existe
+   * @param producto
+   * @param cantidad
+   */
   @SneakyThrows
   @Override
   public void addStock(Integer producto, Integer cantidad) {

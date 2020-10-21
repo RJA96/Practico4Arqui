@@ -1,11 +1,10 @@
 package com.grupo7.practico.service;
 
 import com.grupo7.practico.model.Cliente;
-import com.grupo7.practico.model.Factura;
 import com.grupo7.practico.repository.IReporte;
 import java.util.List;
-import java.util.Map;
 
+/** Servicio para la logica de Clientes */
 public interface ClienteService {
   List<Cliente> getAll();
 

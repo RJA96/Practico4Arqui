@@ -30,11 +30,10 @@ public class Cliente implements Serializable {
   String nombre;
 
   @JsonIgnore
-  @OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   List<Factura> facturas = new ArrayList<>();
 
   public void removeFactura(Factura factura) {
     this.facturas.remove(factura);
   }
-
 }

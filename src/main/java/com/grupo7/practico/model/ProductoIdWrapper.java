@@ -10,6 +10,7 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import java.io.Serializable;
 
+/** Utilizado para embeber el id de producto para FK */
 @Embeddable
 @Data
 @NoArgsConstructor

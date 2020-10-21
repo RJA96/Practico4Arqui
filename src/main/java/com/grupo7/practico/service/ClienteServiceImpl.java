@@ -5,13 +5,13 @@ import com.grupo7.practico.model.Cliente;
 import com.grupo7.practico.repository.ClienteRepository;
 import com.grupo7.practico.repository.IReporte;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import javassist.NotFoundException;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/** Implementacion del servicio de clientes */
 @Service
 public class ClienteServiceImpl implements ClienteService {
 

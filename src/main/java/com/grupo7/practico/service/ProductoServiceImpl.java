@@ -6,8 +6,6 @@ import com.grupo7.practico.model.ProductoIdWrapper;
 import com.grupo7.practico.model.Producto;
 import com.grupo7.practico.repository.ControlStockRepository;
 import com.grupo7.practico.repository.ProductoRepository;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import javassist.NotFoundException;
@@ -15,6 +13,7 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/** Implementacion del servicio de Productos */
 @Service
 public class ProductoServiceImpl implements ProductoService {
 

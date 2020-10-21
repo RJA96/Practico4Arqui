@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Controller de clientes
+ */
 @RestController
 @RequestMapping("/clientes")
 @CrossOrigin(origins = "*")
@@ -62,6 +65,10 @@ public class ClienteController {
     }
   }
 
+  /**
+   * Endpoint que retorna el reporte con los clientes y los montos totales gastados
+   * @return cliente + monto compra
+   */
   @GetMapping("/getReporte")
   public ResponseEntity<?> getReporte() {
     return ResponseEntity.ok().body(clienteService.getReporte());

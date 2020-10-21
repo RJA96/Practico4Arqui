@@ -6,12 +6,21 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+/** Repositorio de productos */
 @Repository
 public interface ProductoRepository extends CrudRepository<Producto, Integer> {
+
+  /**
+   * Query utilizada para obtener el producto mas vendido
+   *
+   * @return Producto
+   */
   @Query(
-      value = "SELECT * FROM producto p "
-          + "    Join cantidad_productos cp on p.id_producto = cp.producto_id_producto "
-          + "GROUP BY id_producto, cp.cantidad "
-          + "order by cp.cantidad DESC", nativeQuery = true)
+      value =
+          "SELECT * FROM producto p "
+              + "    Join cantidad_productos cp on p.id_producto = cp.producto_id_producto "
+              + "GROUP BY id_producto, cp.cantidad "
+              + "order by cp.cantidad DESC",
+      nativeQuery = true)
   List<Producto> findMostBuy();
 }

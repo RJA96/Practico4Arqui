@@ -3,7 +3,6 @@ package com.grupo7.practico.service;
 import com.google.common.collect.Lists;
 import com.grupo7.practico.model.Cliente;
 import com.grupo7.practico.model.Factura;
-import com.grupo7.practico.repository.CantidadProductosRepository;
 import com.grupo7.practico.repository.ClienteRepository;
 import com.grupo7.practico.repository.FacturaRepository;
 import java.time.LocalDate;
@@ -14,6 +13,7 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/** Implementacion del servicio de Facturas */
 @Service
 public class FacturaServiceImpl implements FacturaService {
 
@@ -22,12 +22,10 @@ public class FacturaServiceImpl implements FacturaService {
 
   @Autowired
   public FacturaServiceImpl(
-      FacturaRepository facturaRepository,
-      ClienteRepository clienteRepository) {
+      FacturaRepository facturaRepository, ClienteRepository clienteRepository) {
     this.facturaRepository = facturaRepository;
     this.clienteRepository = clienteRepository;
   }
-
 
   @Override
   public List<Factura> getAll() {
@@ -60,7 +58,6 @@ public class FacturaServiceImpl implements FacturaService {
     }
   }
 
-
   @Override
   @SneakyThrows
   public void updateFactura(Factura factura) {
@@ -72,6 +69,11 @@ public class FacturaServiceImpl implements FacturaService {
     }
   }
 
+  /**
+   * Para eliminar primero se elimina de la Lista del cliente q posea la factura
+   *
+   * @param idFactura
+   */
   @Override
   @SneakyThrows
   public void deleteFactura(Integer idFactura) {

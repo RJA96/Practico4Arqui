@@ -1,9 +1,11 @@
 package com.grupo7.practico.repository;
 
-import com.grupo7.practico.model.Cliente;
-
+/** Interfaz utilizada para mapear el Cliente con su factura */
 public interface IReporte {
+
   Integer getId();
+
   String getNombre();
+
   Double getSuma();
 }

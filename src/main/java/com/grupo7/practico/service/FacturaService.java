@@ -5,7 +5,7 @@ import com.grupo7.practico.model.Factura;
 import java.time.LocalDate;
 import java.util.List;
 
-
+/** Servicio para la logica de Facturas */
 public interface FacturaService {
 
   List<Factura> getAll();

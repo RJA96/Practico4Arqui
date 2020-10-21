@@ -3,6 +3,7 @@ package com.grupo7.practico.service;
 import com.grupo7.practico.model.Producto;
 import java.util.List;
 
+/** Servicio para la logica de Productos */
 public interface ProductoService {
   List<Producto> getAll();
 
